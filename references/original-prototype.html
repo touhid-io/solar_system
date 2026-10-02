@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cosmic Gravity Engine — Orbital Mechanics Studio</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+    body {
+      background: #010206;
+      color: #f0f4ff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    #masterCanvas {
+      display: block;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    /* Top HUD */
+    .hud-top {
+      position: fixed; top: 20px; left: 24px; right: 24px;
+      display: flex; justify-content: space-between; align-items: center;
+      pointer-events: none; z-index: 10;
+    }
+    .brand {
+      background: rgba(8, 12, 26, 0.78);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(251, 191, 36, 0.25);
+      padding: 12px 20px; border-radius: 14px;
+      pointer-events: auto;
+    }
+    .brand h1 {
+      font-size: 16px; font-weight: 700; letter-spacing: 0.6px;
+      background: linear-gradient(90deg, #fbbf24, #f97316, #38bdf8);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .brand p { font-size: 11px; color: #94a3b8; margin-top: 3px; }
+
+    .metrics {
+      background: rgba(8, 12, 26, 0.78);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(251, 191, 36, 0.25);
+      padding: 10px 18px; border-radius: 14px;
+      font-family: monospace; font-size: 12px; color: #fbbf24;
+      display: flex; gap: 18px; align-items: center;
+      pointer-events: auto;
+    }
+    .zero-time { color: #38bdf8; font-weight: bold; }
+    .rec-badge {
+      display: none; align-items: center; gap: 6px;
+      color: #f87171; font-weight: bold;
+    }
+    .rec-dot {
+      width: 9px; height: 9px; background: #ef4444;
+      border-radius: 50%; animation: blink 1s infinite;
+    }
+    @keyframes blink { 50% { opacity: 0.2; } }
+
+    /* Cinematic Bangla Subtitle Box */
+    .subtitle-box {
+      position: fixed; bottom: 34px; left: 50%;
+      transform: translateX(-50%);
+      max-width: 820px; width: 90%;
+      text-align: center; pointer-events: none; z-index: 10;
+      background: linear-gradient(180deg, rgba(2, 4, 12, 0.0), rgba(2, 4, 12, 0.85) 30%, rgba(2, 4, 12, 0.92));
+      padding: 18px 28px; border-radius: 18px;
+      border-bottom: 2px solid rgba(251, 191, 36, 0.5);
+      transition: opacity 0.4s ease;
+    }
+    .subtitle-phase {
+      font-size: 11px; text-transform: uppercase; letter-spacing: 2px;
+      color: #fbbf24; margin-bottom: 6px; font-weight: 700;
+    }
+    .subtitle-text {
+      font-size: 17px; line-height: 1.6; color: #f8fafc;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
+      font-weight: 500;
+    }
+
+    /* Floating & Draggable Control Pod */
+    .floating-pod {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      width: 370px;
+      background: rgba(10, 14, 28, 0.82);
+      backdrop-filter: blur(28px) saturate(180%);
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 22px;
+      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(251, 191, 36, 0.12) inset;
+      z-index: 100;
+      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
+    }
+    .floating-pod.hidden-pod {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(25px) scale(0.95);
+    }
+
+    .pod-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 13px 18px;
+      background: rgba(255, 255, 255, 0.04);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      cursor: grab;
+    }
+    .pod-header:active { cursor: grabbing; }
+
+    .pod-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: #cbd5e1;
+    }
+    .grip-dots {
+      color: #fbbf24;
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .skip-btn {
+      background: rgba(255, 255, 255, 0.07);
+      color: #94a3b8;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 10.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .skip-btn:hover {
+      background: rgba(239, 68, 68, 0.2);
+      color: #fca5a5;
+      border-color: rgba(239, 68, 68, 0.4);
+    }
+
+    .pod-body {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .control-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .control-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.9px;
+      color: #94a3b8;
+    }
+    .control-label span.val {
+      color: #fbbf24;
+      font-family: monospace;
+    }
+
+    select {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.85);
+      color: #f8fafc;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      padding: 9px 12px;
+      border-radius: 11px;
+      font-size: 12.5px;
+      font-weight: 500;
+      outline: none;
+      cursor: pointer;
+      transition: border 0.2s;
+    }
+    select:hover, select:focus {
+      border-color: #fbbf24;
+    }
+
+    .slider-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 99px;
+      outline: none;
+      cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: #fbbf24;
+      box-shadow: 0 0 10px rgba(251, 191, 36, 0.8);
+      cursor: pointer;
+    }
+
+    .btn-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    button.action-btn {
+      padding: 11px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    button.record-trigger {
+      background: linear-gradient(135deg, #dc2626, #991b1b);
+      color: #ffffff;
+      border: 1px solid rgba(248, 113, 113, 0.5);
+      box-shadow: 0 8px 24px rgba(220, 38, 38, 0.3);
+    }
+    button.record-trigger.recording {
+      background: #ffffff;
+      color: #dc2626;
+      animation: pulseRec 1.2s infinite;
+    }
+    @keyframes pulseRec {
+      50% { box-shadow: 0 0 25px rgba(255, 255, 255, 0.9); }
+    }
+
+    .toggle-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 11px;
+      color: #94a3b8;
+    }
+    .toggle-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .toggle-item input { cursor: pointer; accent-color: #fbbf24; }
+  </style>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+
+  <!-- Master Canvas -->
+  <canvas id="masterCanvas"></canvas>
+
+  <!-- Top Telemetry HUD -->
+  <div class="hud-top">
+    <div class="brand">
+      <h1>ORBITAL MECHANICS STUDIO // SYSTEM DYNAMICS</h1>
+      <p>Angular Momentum + Gravitational Pull + Orbital Velocity</p>
+    </div>
+    <div class="metrics">
+      <div class="rec-badge" id="recBadge"><span class="rec-dot"></span> REC <span id="recTimer">00:00</span></div>
+      <span id="speedCounter">ORBIT SPEED: 1.0x</span>
+      <span class="zero-time">GRAVITY: ACTIVE</span>
+      <span id="stateBadge">MODE: COSMIC DANCE</span>
+    </div>
+  </div>
+
+  <!-- Story Narration Subtitle Overlay (Strictly Bangla) -->
+  <div class="subtitle-box" id="subtitleBox">
+    <div class="subtitle-phase" id="subPhase">PHASE 1 // পৃথিবীর ঘূর্ণন (ANGULAR MOMENTUM)</div>
+    <div class="subtitle-text" id="subText">
+      পৃথিবী কেন ঘোরে? সৌরজগত সৃষ্টির সময় বিশাল গ্যাস ও ধুলিকণার মেঘ ঘুরতে ঘুরতে একত্রিত হয়। সেই আদিম ঘূর্ণন গতির কারণেই পৃথিবী আজও নিজের অক্ষের ওপর লাটিমের মতো ঘুরছে।
+    </div>
+  </div>
+
+  <!-- Control Pod -->
+  <div class="floating-pod" id="directorPod">
+    <div class="pod-header" id="podHeader">
+      <div class="pod-title">
+        <span class="grip-dots">⠿</span> ORBITAL DIRECTOR POD
+      </div>
+      <div class="pod-actions">
+        <button class="skip-btn" id="skipPodBtn" title="Hide panel for 60 seconds">✕ Skip 60s</button>
+      </div>
+    </div>
+
+    <div class="pod-body">
+      <div class="control-row">
+        <div class="control-label">
+          <span>Story Timeline Phase</span>
+          <span class="val" id="phaseTag">AUTO</span>
+        </div>
+        <select id="phaseSelect">
+          <option value="auto">🎬 Auto Documentary Sequence</option>
+          <option value="phase1">01. Earth Axis Rotation (Angular Momentum)</option>
+          <option value="phase2">02. Solar Orbit (Gravity Balance)</option>
+          <option value="phase3">03. Lunar Orbit (Earth's Pull)</option>
+          <option value="phase4">04. The Complete Cosmic Dance</option>
+        </select>
+      </div>
+
+      <div class="control-row">
+        <div class="control-label">
+          <span>AI Camera Director</span>
+          <span class="val" id="camTag">CINEMATIC</span>
+        </div>
+        <select id="cameraSelect">
+          <option value="cinematic">🎥 Auto Cinematic Director</option>
+          <option value="sunView">☀️ Solar Center View</option>
+          <option value="earthView">🌍 Earth Tracking Rig</option>
+          <option value="moonView">🌕 Lunar Tracking Rig</option>
+          <option value="topDown">🌌 Top-Down Tactical View</option>
+        </select>
+      </div>
+
+      <div class="slider-grid">
+        <div class="control-row">
+          <div class="control-label">
+            <span>Time Speed (Multiplier)</span>
+            <span class="val" id="speedVal">1.0x</span>
+          </div>
+          <input type="range" id="speedSlider" min="0.1" max="4.0" step="0.1" value="1.0" />
+        </div>
+
+        <div class="control-row">
+          <div class="control-label">
+            <span>HDR Bloom</span>
+            <span class="val" id="bloomVal">1.5</span>
+          </div>
+          <input type="range" id="bloomSlider" min="0.5" max="3.0" step="0.1" value="1.5" />
+        </div>
+      </div>
+
+      <div class="btn-grid">
+        <button class="action-btn record-trigger" id="recordBtn">
+          🔴 Render 60FPS Video
+        </button>
+      </div>
+
+      <div class="toggle-bar">
+        <label class="toggle-item">
+          <input type="checkbox" id="subToggle" checked />
+          Show Subtitles & Burn-in Video
+        </label>
+        <label class="toggle-item">
+          <input type="checkbox" id="pathToggle" checked />
+          Show Orbital Paths
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+    import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+    import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+
+    // --- MASTER SETUP ---
+    const masterCanvas = document.getElementById('masterCanvas');
+    const ctx2d = masterCanvas.getContext('2d');
+    const DPR = Math.min(window.devicePixelRatio, 2);
+    
+    function syncCanvasSize() {
+      masterCanvas.width = window.innerWidth * DPR;
+      masterCanvas.height = window.innerHeight * DPR;
+    }
+    syncCanvasSize();
+
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x010206, 0.001);
+
+    const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 4000);
+    camera.position.set(0, 50, 150);
+
+    const renderer = new THREE.WebGLRenderer({
+      antialias: true,
+      powerPreference: "high-performance",
+      preserveDrawingBuffer: true
+    });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(DPR);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.2;
+
+    const controls = new OrbitControls(camera, masterCanvas);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.04;
+
+    const composer = new EffectComposer(renderer);
+    composer.addPass(new RenderPass(scene, camera));
+    const bloomPass = new UnrealBloomPass(
+      new THREE.Vector2(window.innerWidth, window.innerHeight),
+      1.5, 0.4, 0.1
+    );
+    composer.addPass(bloomPass);
+
+    // --- AMBIENT STARS ---
+    function createCosmicStarfield() {
+      const count = 30000;
+      const geo = new THREE.BufferGeometry();
+      const pos = new Float32Array(count * 3);
+      const colors = new Float32Array(count * 3);
+      
+      for (let i = 0; i < count; i++) {
+        const i3 = i * 3;
+        const r = 300 + Math.random() * 1500;
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(2 * Math.random() - 1);
+
+        pos[i3] = r * Math.sin(phi) * Math.cos(theta);
+        pos[i3 + 1] = (r * Math.sin(phi) * Math.sin(theta));
+        pos[i3 + 2] = r * Math.cos(phi);
+
+        const intensity = 0.5 + Math.random() * 0.5;
+        colors[i3] = intensity;
+        colors[i3 + 1] = intensity;
+        colors[i3 + 2] = intensity * (Math.random() > 0.8 ? 1.5 : 1);
+      }
+
+      geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+      geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+      const mat = new THREE.PointsMaterial({
+        size: 1.2, vertexColors: true, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending
+      });
+      const stars = new THREE.Points(geo, mat);
+      scene.add(stars);
+      return stars;
+    }
+    const starfield = createCosmicStarfield();
+
+    // --- CELESTIAL BODIES (SUN, EARTH, MOON) ---
+    const systemParams = {
+      earthDistance: 75,
+      moonDistance: 14,
+      earthRadius: 4.5,
+      sunRadius: 16,
+      moonRadius: 1.8
+    };
+
+    // 1. SUN
+    const sunGeo = new THREE.SphereGeometry(systemParams.sunRadius, 64, 64);
+    const sunMat = new THREE.MeshStandardMaterial({
+      color: 0xf97316, emissive: 0xfbbf24, emissiveIntensity: 2.5, roughness: 0.2
+    });
+    const sunMesh = new THREE.Mesh(sunGeo, sunMat);
+    scene.add(sunMesh);
+
+    const sunLight = new THREE.PointLight(0xffeedd, 3500, 1000, 1.5);
+    scene.add(sunLight);
+    scene.add(new THREE.AmbientLight(0x111122, 0.4));
+
+    // Sun Corona/Aura
+    const coronaGeo = new THREE.SphereGeometry(systemParams.sunRadius + 3, 32, 32);
+    const coronaMat = new THREE.MeshBasicMaterial({
+      color: 0xfbbf24, transparent: true, opacity: 0.2, blending: THREE.AdditiveBlending
+    });
+    const sunCorona = new THREE.Mesh(coronaGeo, coronaMat);
+    scene.add(sunCorona);
+
+    // 2. EARTH SYSTEM
+    const earthOrbitNode = new THREE.Group(); // Rotates around sun
+    scene.add(earthOrbitNode);
+
+    const earthLocalGroup = new THREE.Group(); // Positioned at earthDistance
+    earthLocalGroup.position.x = systemParams.earthDistance;
+    earthOrbitNode.add(earthLocalGroup);
+
+    // Earth Mesh (Rotates on own axis)
+    const earthGeo = new THREE.SphereGeometry(systemParams.earthRadius, 48, 48);
+    const earthMat = new THREE.MeshStandardMaterial({
+      color: 0x0ea5e9, roughness: 0.4, metalness: 0.1
+    });
+    const earthMesh = new THREE.Mesh(earthGeo, earthMat);
+    // Earth's Axial Tilt (approx 23.5 degrees)
+    earthMesh.rotation.z = THREE.MathUtils.degToRad(23.5);
+    earthLocalGroup.add(earthMesh);
+
+    // Earth Atmosphere Glow
+    const atmosphereGeo = new THREE.SphereGeometry(systemParams.earthRadius + 0.6, 32, 32);
+    const atmosphereMat = new THREE.MeshBasicMaterial({
+      color: 0x38bdf8, transparent: true, opacity: 0.25, blending: THREE.AdditiveBlending
+    });
+    const atmosphere = new THREE.Mesh(atmosphereGeo, atmosphereMat);
+    earthLocalGroup.add(atmosphere);
+
+    // 3. MOON SYSTEM
+    const moonOrbitNode = new THREE.Group(); // Rotates around earth
+    // Tilt the moon's orbit slightly relative to earth
+    moonOrbitNode.rotation.x = THREE.MathUtils.degToRad(5.1);
+    earthLocalGroup.add(moonOrbitNode);
+
+    const moonGeo = new THREE.SphereGeometry(systemParams.moonRadius, 32, 32);
+    const moonMat = new THREE.MeshStandardMaterial({
+      color: 0x94a3b8, roughness: 0.8, metalness: 0.0
+    });
+    const moonMesh = new THREE.Mesh(moonGeo, moonMat);
+    moonMesh.position.x = systemParams.moonDistance;
+    moonOrbitNode.add(moonMesh);
+
+    // --- ORBITAL PATHS (RINGS) ---
+    function createOrbitPath(radius, color, opacity = 0.3) {
+      const curve = new THREE.EllipseCurve(0, 0, radius, radius, 0, 2 * Math.PI, false, 0);
+      const points = curve.getPoints(128);
+      const geometry = new THREE.BufferGeometry().setFromPoints(points);
+      const material = new THREE.LineBasicMaterial({ color: color, transparent: true, opacity: opacity });
+      const line = new THREE.Line(geometry, material);
+      line.rotation.x = Math.PI / 2; // Lay flat
+      return line;
+    }
+    
+    const earthOrbitPath = createOrbitPath(systemParams.earthDistance, 0x38bdf8, 0.4);
+    scene.add(earthOrbitPath);
+    
+    const moonOrbitPath = createOrbitPath(systemParams.moonDistance, 0x94a3b8, 0.5);
+    // Apply moon orbit tilt
+    moonOrbitPath.rotation.x = Math.PI / 2;
+    moonOrbitPath.rotation.y = THREE.MathUtils.degToRad(5.1);
+    earthLocalGroup.add(moonOrbitPath);
+
+    // --- BANGLA STORY SUBTITLES ---
+    const storyData = {
+      phase1: {
+        title: "PHASE 1 // পৃথিবীর নিজ অক্ষে ঘূর্ণন (ANGULAR MOMENTUM)",
+        text: "পৃথিবী কেন ঘোরে? সৌরজগত সৃষ্টির সময় বিশাল গ্যাস ও ধুলিকণার মেঘ ঘুরতে ঘুরতে একত্রিত হয়। সেই আদিম ঘূর্ণন গতির কারণেই পৃথিবী আজও নিজের অক্ষের ওপর লাটিমের মতো ঘুরছে।"
+      },
+      phase2: {
+        title: "PHASE 2 // সূর্যের চারদিকে কক্ষপথ (GRAVITATIONAL BALANCE)",
+        text: "সূর্যের চারদিকে কেন ঘোরে? সূর্যের বিশাল মহাকর্ষ বল পৃথিবীকে নিজের দিকে টানে। অন্যদিকে পৃথিবীর নিজস্ব গতি তাকে সামনের দিকে নিয়ে যেতে চায়। এই দুই শক্তির ভারসাম্যে সৃষ্টি হয় একটি নিখুঁত কক্ষপথ।"
+      },
+      phase3: {
+        title: "PHASE 3 // চাঁদের আবর্তন (EARTH's GRAVITY)",
+        text: "চাঁদ কেন পৃথিবীর চারদিকে ঘোরে? ঠিক একই নিয়মে, পৃথিবীর মহাকর্ষ বল চাঁদকে মহাশূন্যে ছিটকে যেতে দেয় না। ফলে চাঁদ পৃথিবীর চারদিকে একটি নির্দিষ্ট কক্ষপথে ঘুরতে বাধ্য হয়।"
+      },
+      phase4: {
+        title: "PHASE 4 // মহাজাগতিক নৃত্য (THE COSMIC DANCE)",
+        text: "নিজ অক্ষে পৃথিবীর ঘূর্ণন (দিন-রাত), সূর্যের চারদিকে পরিক্রমণ (ঋতু পরিবর্তন) এবং চাঁদের আবর্তন—এই সবকিছু মিলে মহাবিশ্বের এক অপূর্ব মেকানিজম বা সিস্টেম তৈরি করেছে।"
+      }
+    };
+
+    let currentPhase = 'phase1';
+
+    function applyPhaseSettings(phase) {
+      currentPhase = phase;
+      const info = storyData[phase];
+      document.getElementById('subPhase').innerText = info.title;
+      document.getElementById('subText').innerText = info.text;
+      document.getElementById('phaseTag').innerText = phase.toUpperCase();
+    }
+
+    // --- UI CONTROLS & POD LOGIC ---
+    const directorPod = document.getElementById('directorPod');
+    const podHeader = document.getElementById('podHeader');
+    const skipPodBtn = document.getElementById('skipPodBtn');
+    const subtitleBox = document.getElementById('subtitleBox');
+    
+    const subToggle = document.getElementById('subToggle');
+    const pathToggle = document.getElementById('pathToggle');
+    const phaseSelect = document.getElementById('phaseSelect');
+    const cameraSelect = document.getElementById('cameraSelect');
+    const speedSlider = document.getElementById('speedSlider');
+    const bloomSlider = document.getElementById('bloomSlider');
+
+    let isDraggingPod = false;
+    let dragOffsetX = 0;
+    let dragOffsetY = 0;
+
+    podHeader.addEventListener('pointerdown', (e) => {
+      if (e.target === skipPodBtn) return;
+      isDraggingPod = true;
+      const rect = directorPod.getBoundingClientRect();
+      dragOffsetX = e.clientX - rect.left;
+      dragOffsetY = e.clientY - rect.top;
+      directorPod.style.bottom = 'auto';
+      directorPod.style.right = 'auto';
+      directorPod.style.left = `${rect.left}px`;
+      directorPod.style.top = `${rect.top}px`;
+    });
+
+    window.addEventListener('pointermove', (e) => {
+      if (!isDraggingPod) return;
+      const x = Math.max(12, Math.min(window.innerWidth - directorPod.offsetWidth - 12, e.clientX - dragOffsetX));
+      const y = Math.max(12, Math.min(window.innerHeight - directorPod.offsetHeight - 12, e.clientY - dragOffsetY));
+      directorPod.style.left = `${x}px`;
+      directorPod.style.top = `${y}px`;
+    });
+
+    window.addEventListener('pointerup', () => { isDraggingPod = false; });
+
+    skipPodBtn.addEventListener('click', () => {
+      directorPod.classList.add('hidden-pod');
+      setTimeout(() => directorPod.classList.remove('hidden-pod'), 60000);
+    });
+
+    subToggle.addEventListener('change', (e) => {
+      subtitleBox.style.opacity = e.target.checked ? '1' : '0';
+    });
+
+    pathToggle.addEventListener('change', (e) => {
+      earthOrbitPath.visible = e.target.checked;
+      moonOrbitPath.visible = e.target.checked;
+    });
+
+    speedSlider.addEventListener('input', e => {
+      document.getElementById('speedVal').innerText = `${parseFloat(e.target.value).toFixed(1)}x`;
+      document.getElementById('speedCounter').innerText = `ORBIT SPEED: ${parseFloat(e.target.value).toFixed(1)}x`;
+    });
+
+    bloomSlider.addEventListener('input', e => {
+      bloomPass.strength = parseFloat(e.target.value);
+      document.getElementById('bloomVal').innerText = parseFloat(e.target.value).toFixed(1);
+    });
+
+    phaseSelect.addEventListener('change', e => {
+      if (e.target.value !== 'auto') applyPhaseSettings(e.target.value);
+    });
+    
+    cameraSelect.addEventListener('change', e => {
+      document.getElementById('camTag').innerText = e.target.value.toUpperCase();
+    });
+
+    // --- TEXT BURN-IN FOR VIDEO RECORDER ---
+    let isRecording = false;
+
+    function wrapCanvasText(ctx, text, x, y, maxWidth, lineHeight) {
+      const words = text.split(' ');
+      let line = '';
+      const lines = [];
+      for (let n = 0; n < words.length; n++) {
+        const testLine = line + words[n] + ' ';
+        const metrics = ctx.measureText(testLine);
+        if (metrics.width > maxWidth && n > 0) {
+          lines.push(line.trim());
+          line = words[n] + ' ';
+        } else {
+          line = testLine;
+        }
+      }
+      lines.push(line.trim());
+      lines.forEach((l, i) => ctx.fillText(l, x, y + i * lineHeight));
+    }
+
+    function drawForVideoRecordingOnly() {
+      if (!isRecording || !subToggle.checked) return;
+
+      ctx2d.save();
+      ctx2d.scale(DPR, DPR);
+      const cssW = window.innerWidth;
+      const cssH = window.innerHeight;
+
+      const info = storyData[currentPhase];
+      const boxW = Math.min(820, cssW * 0.9);
+      const boxH = 120;
+      const boxX = (cssW - boxW) / 2;
+      const boxY = cssH - boxH - 34;
+
+      const grad = ctx2d.createLinearGradient(boxX, boxY, boxX, boxY + boxH);
+      grad.addColorStop(0, 'rgba(2, 4, 12, 0.15)');
+      grad.addColorStop(0.3, 'rgba(2, 4, 12, 0.85)');
+      grad.addColorStop(1, 'rgba(2, 4, 12, 0.92)');
+
+      ctx2d.fillStyle = grad;
+      ctx2d.beginPath();
+      ctx2d.roundRect(boxX, boxY, boxW, boxH, 18);
+      ctx2d.fill();
+
+      ctx2d.strokeStyle = 'rgba(251, 191, 36, 0.5)';
+      ctx2d.lineWidth = 2;
+      ctx2d.beginPath();
+      ctx2d.moveTo(boxX + 18, boxY + boxH);
+      ctx2d.lineTo(boxX + boxW - 18, boxY + boxH);
+      ctx2d.stroke();
+
+      ctx2d.textAlign = 'center';
+      ctx2d.fillStyle = '#fbbf24';
+      ctx2d.font = '700 12px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx2d.fillText(info.title, cssW / 2, boxY + 28);
+
+      ctx2d.fillStyle = '#f8fafc';
+      ctx2d.font = '500 17px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      wrapCanvasText(ctx2d, info.text, cssW / 2, boxY + 58, boxW - 56, 26);
+
+      ctx2d.restore();
+    }
+
+    // --- ANIMATION & RENDER LOOP ---
+    let clock = 0;
+
+    function updateScene() {
+      const dt = 0.016;
+      const timeScale = parseFloat(speedSlider.value);
+      const activeDelta = dt * timeScale;
+      clock += dt; // Real time for auto camera
+      
+      // Auto Documentary Timeline
+      if (phaseSelect.value === 'auto') {
+        const cycleTime = (clock % 40);
+        let nextP = 'phase1';
+        if (cycleTime > 10 && cycleTime <= 20) nextP = 'phase2';
+        else if (cycleTime > 20 && cycleTime <= 30) nextP = 'phase3';
+        else if (cycleTime > 30) nextP = 'phase4';
+
+        if (nextP !== currentPhase) applyPhaseSettings(nextP);
+      }
+
+      // Orbital Rotations
+      // Sun spins slowly
+      sunMesh.rotation.y += 0.002 * activeDelta * 60;
+      sunCorona.rotation.y -= 0.001 * activeDelta * 60;
+
+      // Earth orbits Sun
+      earthOrbitNode.rotation.y += 0.005 * activeDelta * 60;
+      
+      // Earth spins on its axis (fast)
+      earthMesh.rotation.y += 0.05 * activeDelta * 60;
+      atmosphere.rotation.y += 0.055 * activeDelta * 60;
+
+      // Moon orbits Earth
+      moonOrbitNode.rotation.y += 0.02 * activeDelta * 60;
+      
+      // Moon is tidally locked (spins exactly as fast as it orbits)
+      moonMesh.rotation.y += 0.02 * activeDelta * 60;
+
+      // Camera AI Director
+      let camMode = cameraSelect.value;
+      let targetCamPos = new THREE.Vector3();
+      let targetLookAt = new THREE.Vector3(0,0,0);
+
+      const earthWorldPos = new THREE.Vector3();
+      earthMesh.getWorldPosition(earthWorldPos);
+      
+      const moonWorldPos = new THREE.Vector3();
+      moonMesh.getWorldPosition(moonWorldPos);
+
+      if (camMode === 'cinematic') {
+        if (currentPhase === 'phase1') {
+          // Close up on Earth's rotation
+          targetCamPos.copy(earthWorldPos).add(new THREE.Vector3(15, 8, 25));
+          targetLookAt.copy(earthWorldPos);
+        } else if (currentPhase === 'phase2') {
+          // Wide view showing Earth orbiting Sun
+          targetCamPos.set(Math.sin(clock * 0.1) * 80, 45, Math.cos(clock * 0.1) * 120);
+          targetLookAt.set(0, 0, 0);
+        } else if (currentPhase === 'phase3') {
+          // View showing Earth and Moon
+          targetCamPos.copy(earthWorldPos).add(new THREE.Vector3(25, 15, 30));
+          targetLookAt.copy(earthWorldPos);
+        } else if (currentPhase === 'phase4') {
+          // Extreme wide sweeping shot
+          targetCamPos.set(Math.sin(clock * 0.15) * 120, 60, 160);
+          targetLookAt.set(0, 0, 0);
+        }
+      } else if (camMode === 'sunView') {
+        targetCamPos.set(45, 20, 65);
+        targetLookAt.set(0, 0, 0);
+      } else if (camMode === 'earthView') {
+        targetCamPos.copy(earthWorldPos).add(new THREE.Vector3(12, 10, 28));
+        targetLookAt.copy(earthWorldPos);
+      } else if (camMode === 'moonView') {
+        targetCamPos.copy(moonWorldPos).add(new THREE.Vector3(8, 5, 12));
+        targetLookAt.copy(moonWorldPos);
+      } else if (camMode === 'topDown') {
+        targetCamPos.set(0, 180, 0);
+        targetLookAt.set(0, 0, 0);
+      }
+
+      // Smooth camera interpolation
+      camera.position.lerp(targetCamPos, 0.04);
+      controls.target.lerp(targetLookAt, 0.06);
+
+      starfield.rotation.y += 0.0001;
+      controls.update();
+
+      composer.render();
+
+      ctx2d.clearRect(0, 0, masterCanvas.width, masterCanvas.height);
+      ctx2d.drawImage(renderer.domElement, 0, 0, masterCanvas.width, masterCanvas.height);
+      drawForVideoRecordingOnly();
+    }
+
+    // --- 60FPS RECORDER ---
+    let mediaRecorder = null;
+    let recordedChunks = [];
+    let recSeconds = 0;
+    let recInterval = null;
+    const recordBtn = document.getElementById('recordBtn');
+    const recBadge = document.getElementById('recBadge');
+    const recTimer = document.getElementById('recTimer');
+
+    recordBtn.addEventListener('click', () => {
+      if (!isRecording) {
+        const stream = masterCanvas.captureStream(60);
+        const mimeType = MediaRecorder.isTypeSupported('video/mp4;codecs=avc1')
+          ? 'video/mp4;codecs=avc1'
+          : (MediaRecorder.isTypeSupported('video/webm;codecs=vp9') ? 'video/webm;codecs=vp9' : 'video/webm');
+
+        mediaRecorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond: 25000000 });
+        recordedChunks = [];
+        mediaRecorder.ondataavailable = e => { if (e.data.size > 0) recordedChunks.push(e.data); };
+        mediaRecorder.onstop = () => {
+          const blob = new Blob(recordedChunks, { type: mimeType });
+          const url = URL.createObjectURL(blob);
+          const ext = mimeType.includes('mp4') ? 'mp4' : 'webm';
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `orbital-mechanics-${Date.now()}.${ext}`;
+          a.click();
+        };
+
+        mediaRecorder.start();
+        isRecording = true;
+        recSeconds = 0;
+        recordBtn.classList.add('recording');
+        recordBtn.innerText = '⏹ Stop & Save Video';
+        recBadge.style.display = 'flex';
+        recInterval = setInterval(() => {
+          recSeconds++;
+          const m = String(Math.floor(recSeconds / 60)).padStart(2, '0');
+          const s = String(recSeconds % 60).padStart(2, '0');
+          recTimer.innerText = `${m}:${s}`;
+        }, 1000);
+      } else {
+        mediaRecorder.stop();
+        isRecording = false;
+        clearInterval(recInterval);
+        recordBtn.classList.remove('recording');
+        recordBtn.innerText = '🔴 Render 60FPS Video';
+        recBadge.style.display = 'none';
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      syncCanvasSize();
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      composer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    function animate() {
+      requestAnimationFrame(animate);
+      updateScene();
+    }
+    animate();
+  </script>
+</body>
+</html>

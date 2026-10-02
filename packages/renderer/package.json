@@ -1,0 +1,14 @@
+{
+  "name": "@solar/renderer",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": "./src/index.ts",
+  "dependencies": {
+    "@solar/shared": "0.0.0",
+    "@solar/catalog": "0.0.0"
+  },
+  "peerDependencies": {
+    "three": "0.180.0"
+  }
+}
