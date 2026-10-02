@@ -14,8 +14,10 @@
     "dev": "vite --config apps/explorer/vite.config.ts",
     "build": "tsc --noEmit && vite build --config apps/explorer/vite.config.ts",
     "typecheck": "tsc --noEmit",
-    "test": "node --import tsx --test packages/simulation/test/*.test.ts",
-    "check": "npm run typecheck && npm test && npm run build"
+    "test": "node --import tsx --test packages/simulation/test/*.test.ts packages/catalog/test/*.test.ts",
+    "check": "npm run typecheck && npm test && npm run data:validate && npm run build",
+    "data:validate": "node --import tsx tools/data-pipeline/validate.ts",
+    "data:refresh": "node --import tsx tools/data-pipeline/validate.ts --refresh"
   },
   "dependencies": {
     "react": "19.1.1",

@@ -1,0 +1,102 @@
+{
+  "snapshotVersion": "2026-10-02-transcription-1",
+  "sourceUrl": "https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/naif_ids.html",
+  "note": "Selected NAIF body and barycenter ID mappings; not a raw page snapshot. Internal slugs and hierarchy are application conventions.",
+  "rows": [
+    {
+      "id": "sun",
+      "name": "Sun",
+      "naifId": "10"
+    },
+    {
+      "id": "mercury",
+      "name": "Mercury",
+      "naifId": "199"
+    },
+    {
+      "id": "venus",
+      "name": "Venus",
+      "naifId": "299"
+    },
+    {
+      "id": "earth",
+      "name": "Earth",
+      "naifId": "399"
+    },
+    {
+      "id": "mars",
+      "name": "Mars",
+      "naifId": "499"
+    },
+    {
+      "id": "jupiter",
+      "name": "Jupiter",
+      "naifId": "599"
+    },
+    {
+      "id": "saturn",
+      "name": "Saturn",
+      "naifId": "699"
+    },
+    {
+      "id": "uranus",
+      "name": "Uranus",
+      "naifId": "799"
+    },
+    {
+      "id": "neptune",
+      "name": "Neptune",
+      "naifId": "899"
+    },
+    {
+      "id": "moon",
+      "name": "Moon",
+      "naifId": "301"
+    },
+    {
+      "id": "solar-system-barycenter",
+      "name": "Solar System Barycenter",
+      "naifId": "0"
+    },
+    {
+      "id": "mercury-barycenter",
+      "name": "Mercury System Barycenter",
+      "naifId": "1"
+    },
+    {
+      "id": "venus-barycenter",
+      "name": "Venus System Barycenter",
+      "naifId": "2"
+    },
+    {
+      "id": "earth-barycenter",
+      "name": "Earth System Barycenter",
+      "naifId": "3"
+    },
+    {
+      "id": "mars-barycenter",
+      "name": "Mars System Barycenter",
+      "naifId": "4"
+    },
+    {
+      "id": "jupiter-barycenter",
+      "name": "Jupiter System Barycenter",
+      "naifId": "5"
+    },
+    {
+      "id": "saturn-barycenter",
+      "name": "Saturn System Barycenter",
+      "naifId": "6"
+    },
+    {
+      "id": "uranus-barycenter",
+      "name": "Uranus System Barycenter",
+      "naifId": "7"
+    },
+    {
+      "id": "neptune-barycenter",
+      "name": "Neptune System Barycenter",
+      "naifId": "8"
+    }
+  ]
+}

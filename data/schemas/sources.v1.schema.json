@@ -1,0 +1,113 @@
+{
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "publisher": {
+            "type": "string",
+            "minLength": 1
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "url": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^https://[^\\s]+$"
+          },
+          "retrievedAtUTC": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{3})?Z$"
+          },
+          "upstreamVersion": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "snapshotVersion": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidencePath": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "usage": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "review-required",
+                  "approved"
+                ]
+              },
+              "termsUrl": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^https://[^\\s]+$"
+              },
+              "note": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "status",
+              "termsUrl",
+              "note"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "publisher",
+          "title",
+          "url",
+          "retrievedAtUTC",
+          "upstreamVersion",
+          "snapshotVersion",
+          "evidencePath",
+          "usage"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "sources"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://solar-system.invalid/schemas/v1/sources.json",
+  "title": "sources"
+}

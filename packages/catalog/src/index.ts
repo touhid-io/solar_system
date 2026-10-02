@@ -6,3 +6,7 @@ export const previewBodies: readonly PreviewBody[] = [
  {id:'earth',name:'Earth',displayRadius:1.5,color:0x438edb},
  {id:'moon',name:'Moon',displayRadius:0.45,color:0xaab5c5}
 ];
+
+export * from './contracts';
+export * from './validation';
+export { loadStarterScientificBundle } from './scientific';

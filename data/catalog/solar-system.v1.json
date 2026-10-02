@@ -1,0 +1,523 @@
+{
+  "schemaVersion": 1,
+  "datasetVersion": "0.1.0",
+  "releasedAtUTC": "2026-10-02T22:12:00Z",
+  "coverage": {
+    "status": "partial",
+    "description": "Sun, eight planets, Earth Moon and nine coordinate barycenters with NAIF bindings. Eight planet mean radii and masses ingested. No full satellite census or dynamical/rotation dataset.",
+    "sourceRelease": null
+  },
+  "conventions": {
+    "distance": "km",
+    "mass": "kg",
+    "angle": "rad",
+    "duration": "s",
+    "velocity": "km/s",
+    "dynamicalTime": "TDB",
+    "epochRepresentation": "JD",
+    "inputTime": "UTC",
+    "handedness": "right",
+    "missingValue": "null"
+  },
+  "bodies": [
+    {
+      "id": "sun",
+      "name": "Sun",
+      "kind": "star",
+      "naifId": "10",
+      "parentId": null,
+      "systemBarycenterId": "solar-system-barycenter",
+      "physical": {
+        "meanRadius": null,
+        "mass": null,
+        "gm": null
+      },
+      "rotation": null,
+      "orbit": null,
+      "notes": "Parameters not yet ingested remain null. No position or rotational accuracy is claimed.",
+      "identitySourceId": "naif-body-identities"
+    },
+    {
+      "id": "mercury",
+      "name": "Mercury",
+      "kind": "planet",
+      "naifId": "199",
+      "parentId": "sun",
+      "systemBarycenterId": "mercury-barycenter",
+      "physical": {
+        "meanRadius": {
+          "value": 2439.4,
+          "unit": "km",
+          "uncertainty": 0.1,
+          "uncertaintyKind": "source-reported",
+          "provenance": {
+            "sourceId": "jpl-planet-physical",
+            "locator": "Mercury row / Mean Radius",
+            "method": "transcribed",
+            "note": "Volume-equivalent mean radius, not equatorial radius."
+          }
+        },
+        "mass": {
+          "value": 3.3010299999999994e+23,
+          "unit": "kg",
+          "uncertainty": 2.1e+19,
+          "uncertaintyKind": "source-reported",
+          "provenance": {
+            "sourceId": "jpl-planet-physical",
+            "locator": "Mercury row / Mass",
+            "method": "converted",
+            "note": "Source unit 10^24 kg multiplied by 1e24 for value and absolute uncertainty."
+          }
+        },
+        "gm": null
+      },
+      "rotation": null,
+      "orbit": null,
+      "notes": "Parameters not yet ingested remain null. No position or rotational accuracy is claimed.",
+      "identitySourceId": "naif-body-identities"
+    },
+    {
+      "id": "venus",
+      "name": "Venus",
+      "kind": "planet",
+      "naifId": "299",
+      "parentId": "sun",
+      "systemBarycenterId": "venus-barycenter",
+      "physical": {
+        "meanRadius": {
+          "value": 6051.8,
+          "unit": "km",
+          "uncertainty": 1,
+          "uncertaintyKind": "source-reported",
+          "provenance": {
+            "sourceId": "jpl-planet-physical",
+            "locator": "Venus row / Mean Radius",
+            "method": "transcribed",
+            "note": "Volume-equivalent mean radius, not equatorial radius."
+          }
+        },
+        "mass": {
+          "value": 4.867309999999999e+24,
+          "unit": "kg",
+          "uncertainty": 2.3e+20,
+          "uncertaintyKind": "source-reported",
+          "provenance": {
+            "sourceId": "jpl-planet-physical",
+            "locator": "Venus row / Mass",
+            "method": "converted",
+            "note": "Source unit 10^24 kg multiplied by 1e24 for value and absolute uncertainty."
+          }
+        },
+        "gm": null
+      },
+      "rotation": null,
+      "orbit": null,
+      "notes": "Parameters not yet ingested remain null. No position or rotational accuracy is claimed.",
+      "identitySourceId": "naif-body-identities"
+    },
+    {
+      "id": "earth",
+      "name": "Earth",
+      "kind": "planet",
+      "naifId": "399",
+      "parentId": "sun",
+      "systemBarycenterId": "earth-barycenter",
+      "physical": {
+        "meanRadius": {
+          "value": 6371.0084,
+          "unit": "km",
+          "uncertainty": 0.0001,
+          "uncertaintyKind": "source-reported",
+          "provenance": {
+            "sourceId": "jpl-planet-physical",
+            "locator": "Earth row / Mean Radius",
+            "method": "transcribed",
+            "note": "Volume-equivalent mean radius, not equatorial radius."
+          }
+        },
+        "mass": {
+          "value": 5.97217e+24,
+          "unit": "kg",
+          "uncertainty": 2.7999999999999997e+20,
+          "uncertaintyKind": "source-reported",
+          "provenance": {
+            "sourceId": "jpl-planet-physical",
+            "locator": "Earth row / Mass",
+            "method": "converted",
+            "note": "Source unit 10^24 kg multiplied by 1e24 for value and absolute uncertainty."
+          }
+        },
+        "gm": null
+      },
+      "rotation": null,
+      "orbit": null,
+      "notes": "Parameters not yet ingested remain null. No position or rotational accuracy is claimed.",
+      "identitySourceId": "naif-body-identities"
+    },
+    {
+      "id": "mars",
+      "name": "Mars",
+      "kind": "planet",
+      "naifId": "499",
+      "parentId": "sun",
+      "systemBarycenterId": "mars-barycenter",
+      "physical": {
+        "meanRadius": {
+          "value": 3389.5,
+          "unit": "km",
+          "uncertainty": 0.2,
+          "uncertaintyKind": "source-reported",
+          "provenance": {
+            "sourceId": "jpl-planet-physical",
+            "locator": "Mars row / Mean Radius",
+            "method": "transcribed",
+            "note": "Volume-equivalent mean radius, not equatorial radius."
+          }
+        },
+        "mass": {
+          "value": 6.41691e+23,
+          "unit": "kg",
+          "uncertainty": 3e+19,
+          "uncertaintyKind": "source-reported",
+          "provenance": {
+            "sourceId": "jpl-planet-physical",
+            "locator": "Mars row / Mass",
+            "method": "converted",
+            "note": "Source unit 10^24 kg multiplied by 1e24 for value and absolute uncertainty."
+          }
+        },
+        "gm": null
+      },
+      "rotation": null,
+      "orbit": null,
+      "notes": "Parameters not yet ingested remain null. No position or rotational accuracy is claimed.",
+      "identitySourceId": "naif-body-identities"
+    },
+    {
+      "id": "jupiter",
+      "name": "Jupiter",
+      "kind": "planet",
+      "naifId": "599",
+      "parentId": "sun",
+      "systemBarycenterId": "jupiter-barycenter",
+      "physical": {
+        "meanRadius": {
+          "value": 69911,
+          "unit": "km",
+          "uncertainty": 6,
+          "uncertaintyKind": "source-reported",
+          "provenance": {
+            "sourceId": "jpl-planet-physical",
+            "locator": "Jupiter row / Mean Radius",
+            "method": "transcribed",
+            "note": "Volume-equivalent mean radius, not equatorial radius."
+          }
+        },
+        "mass": {
+          "value": 1.898125e+27,
+          "unit": "kg",
+          "uncertainty": 8.8e+22,
+          "uncertaintyKind": "source-reported",
+          "provenance": {
+            "sourceId": "jpl-planet-physical",
+            "locator": "Jupiter row / Mass",
+            "method": "converted",
+            "note": "Source unit 10^24 kg multiplied by 1e24 for value and absolute uncertainty."
+          }
+        },
+        "gm": null
+      },
+      "rotation": null,
+      "orbit": null,
+      "notes": "Parameters not yet ingested remain null. No position or rotational accuracy is claimed.",
+      "identitySourceId": "naif-body-identities"
+    },
+    {
+      "id": "saturn",
+      "name": "Saturn",
+      "kind": "planet",
+      "naifId": "699",
+      "parentId": "sun",
+      "systemBarycenterId": "saturn-barycenter",
+      "physical": {
+        "meanRadius": {
+          "value": 58232,
+          "unit": "km",
+          "uncertainty": 6,
+          "uncertaintyKind": "source-reported",
+          "provenance": {
+            "sourceId": "jpl-planet-physical",
+            "locator": "Saturn row / Mean Radius",
+            "method": "transcribed",
+            "note": "Volume-equivalent mean radius, not equatorial radius."
+          }
+        },
+        "mass": {
+          "value": 5.68317e+26,
+          "unit": "kg",
+          "uncertainty": 2.6e+22,
+          "uncertaintyKind": "source-reported",
+          "provenance": {
+            "sourceId": "jpl-planet-physical",
+            "locator": "Saturn row / Mass",
+            "method": "converted",
+            "note": "Source unit 10^24 kg multiplied by 1e24 for value and absolute uncertainty."
+          }
+        },
+        "gm": null
+      },
+      "rotation": null,
+      "orbit": null,
+      "notes": "Parameters not yet ingested remain null. No position or rotational accuracy is claimed.",
+      "identitySourceId": "naif-body-identities"
+    },
+    {
+      "id": "uranus",
+      "name": "Uranus",
+      "kind": "planet",
+      "naifId": "799",
+      "parentId": "sun",
+      "systemBarycenterId": "uranus-barycenter",
+      "physical": {
+        "meanRadius": {
+          "value": 25362,
+          "unit": "km",
+          "uncertainty": 7,
+          "uncertaintyKind": "source-reported",
+          "provenance": {
+            "sourceId": "jpl-planet-physical",
+            "locator": "Uranus row / Mean Radius",
+            "method": "transcribed",
+            "note": "Volume-equivalent mean radius, not equatorial radius."
+          }
+        },
+        "mass": {
+          "value": 8.68099e+25,
+          "unit": "kg",
+          "uncertainty": 4e+21,
+          "uncertaintyKind": "source-reported",
+          "provenance": {
+            "sourceId": "jpl-planet-physical",
+            "locator": "Uranus row / Mass",
+            "method": "converted",
+            "note": "Source unit 10^24 kg multiplied by 1e24 for value and absolute uncertainty."
+          }
+        },
+        "gm": null
+      },
+      "rotation": null,
+      "orbit": null,
+      "notes": "Parameters not yet ingested remain null. No position or rotational accuracy is claimed.",
+      "identitySourceId": "naif-body-identities"
+    },
+    {
+      "id": "neptune",
+      "name": "Neptune",
+      "kind": "planet",
+      "naifId": "899",
+      "parentId": "sun",
+      "systemBarycenterId": "neptune-barycenter",
+      "physical": {
+        "meanRadius": {
+          "value": 24622,
+          "unit": "km",
+          "uncertainty": 19,
+          "uncertaintyKind": "source-reported",
+          "provenance": {
+            "sourceId": "jpl-planet-physical",
+            "locator": "Neptune row / Mean Radius",
+            "method": "transcribed",
+            "note": "Volume-equivalent mean radius, not equatorial radius."
+          }
+        },
+        "mass": {
+          "value": 1.024092e+26,
+          "unit": "kg",
+          "uncertainty": 4.8e+21,
+          "uncertaintyKind": "source-reported",
+          "provenance": {
+            "sourceId": "jpl-planet-physical",
+            "locator": "Neptune row / Mass",
+            "method": "converted",
+            "note": "Source unit 10^24 kg multiplied by 1e24 for value and absolute uncertainty."
+          }
+        },
+        "gm": null
+      },
+      "rotation": null,
+      "orbit": null,
+      "notes": "Parameters not yet ingested remain null. No position or rotational accuracy is claimed.",
+      "identitySourceId": "naif-body-identities"
+    },
+    {
+      "id": "moon",
+      "name": "Moon",
+      "kind": "moon",
+      "naifId": "301",
+      "parentId": "earth",
+      "systemBarycenterId": "earth-barycenter",
+      "physical": {
+        "meanRadius": null,
+        "mass": null,
+        "gm": null
+      },
+      "rotation": null,
+      "orbit": null,
+      "notes": "Parameters not yet ingested remain null. No position or rotational accuracy is claimed.",
+      "identitySourceId": "naif-body-identities"
+    },
+    {
+      "id": "solar-system-barycenter",
+      "name": "Solar System Barycenter",
+      "kind": "barycenter",
+      "identitySourceId": "naif-body-identities",
+      "naifId": "0",
+      "parentId": null,
+      "systemBarycenterId": null,
+      "physical": {
+        "meanRadius": null,
+        "mass": null,
+        "gm": null
+      },
+      "rotation": null,
+      "orbit": null,
+      "notes": "Coordinate origin identity only; never render as a physical body. Orbital data not yet ingested."
+    },
+    {
+      "id": "mercury-barycenter",
+      "name": "Mercury System Barycenter",
+      "kind": "barycenter",
+      "identitySourceId": "naif-body-identities",
+      "naifId": "1",
+      "parentId": null,
+      "systemBarycenterId": null,
+      "physical": {
+        "meanRadius": null,
+        "mass": null,
+        "gm": null
+      },
+      "rotation": null,
+      "orbit": null,
+      "notes": "Coordinate origin identity only; never render as a physical body. Orbital data not yet ingested."
+    },
+    {
+      "id": "venus-barycenter",
+      "name": "Venus System Barycenter",
+      "kind": "barycenter",
+      "identitySourceId": "naif-body-identities",
+      "naifId": "2",
+      "parentId": null,
+      "systemBarycenterId": null,
+      "physical": {
+        "meanRadius": null,
+        "mass": null,
+        "gm": null
+      },
+      "rotation": null,
+      "orbit": null,
+      "notes": "Coordinate origin identity only; never render as a physical body. Orbital data not yet ingested."
+    },
+    {
+      "id": "earth-barycenter",
+      "name": "Earth System Barycenter",
+      "kind": "barycenter",
+      "identitySourceId": "naif-body-identities",
+      "naifId": "3",
+      "parentId": null,
+      "systemBarycenterId": null,
+      "physical": {
+        "meanRadius": null,
+        "mass": null,
+        "gm": null
+      },
+      "rotation": null,
+      "orbit": null,
+      "notes": "Coordinate origin identity only; never render as a physical body. Orbital data not yet ingested."
+    },
+    {
+      "id": "mars-barycenter",
+      "name": "Mars System Barycenter",
+      "kind": "barycenter",
+      "identitySourceId": "naif-body-identities",
+      "naifId": "4",
+      "parentId": null,
+      "systemBarycenterId": null,
+      "physical": {
+        "meanRadius": null,
+        "mass": null,
+        "gm": null
+      },
+      "rotation": null,
+      "orbit": null,
+      "notes": "Coordinate origin identity only; never render as a physical body. Orbital data not yet ingested."
+    },
+    {
+      "id": "jupiter-barycenter",
+      "name": "Jupiter System Barycenter",
+      "kind": "barycenter",
+      "identitySourceId": "naif-body-identities",
+      "naifId": "5",
+      "parentId": null,
+      "systemBarycenterId": null,
+      "physical": {
+        "meanRadius": null,
+        "mass": null,
+        "gm": null
+      },
+      "rotation": null,
+      "orbit": null,
+      "notes": "Coordinate origin identity only; never render as a physical body. Orbital data not yet ingested."
+    },
+    {
+      "id": "saturn-barycenter",
+      "name": "Saturn System Barycenter",
+      "kind": "barycenter",
+      "identitySourceId": "naif-body-identities",
+      "naifId": "6",
+      "parentId": null,
+      "systemBarycenterId": null,
+      "physical": {
+        "meanRadius": null,
+        "mass": null,
+        "gm": null
+      },
+      "rotation": null,
+      "orbit": null,
+      "notes": "Coordinate origin identity only; never render as a physical body. Orbital data not yet ingested."
+    },
+    {
+      "id": "uranus-barycenter",
+      "name": "Uranus System Barycenter",
+      "kind": "barycenter",
+      "identitySourceId": "naif-body-identities",
+      "naifId": "7",
+      "parentId": null,
+      "systemBarycenterId": null,
+      "physical": {
+        "meanRadius": null,
+        "mass": null,
+        "gm": null
+      },
+      "rotation": null,
+      "orbit": null,
+      "notes": "Coordinate origin identity only; never render as a physical body. Orbital data not yet ingested."
+    },
+    {
+      "id": "neptune-barycenter",
+      "name": "Neptune System Barycenter",
+      "kind": "barycenter",
+      "identitySourceId": "naif-body-identities",
+      "naifId": "8",
+      "parentId": null,
+      "systemBarycenterId": null,
+      "physical": {
+        "meanRadius": null,
+        "mass": null,
+        "gm": null
+      },
+      "rotation": null,
+      "orbit": null,
+      "notes": "Coordinate origin identity only; never render as a physical body. Orbital data not yet ingested."
+    }
+  ]
+}

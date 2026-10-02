@@ -1,0 +1,117 @@
+{
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "bodyId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^[a-z][a-z0-9-]*$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "texture",
+              "shape",
+              "ephemeris"
+            ]
+          },
+          "uri": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^https://[^\\s]+$"
+          },
+          "sha256": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "byteLength": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "sourceId": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "appearance": {
+            "type": "string",
+            "enum": [
+              "observational",
+              "illustrative",
+              "not-applicable"
+            ]
+          },
+          "license": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "const": "approved"
+              },
+              "identifier": {
+                "type": "string",
+                "minLength": 1
+              },
+              "termsUrl": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^https://[^\\s]+$"
+              },
+              "attribution": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "status",
+              "identifier",
+              "termsUrl",
+              "attribution"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "bodyId",
+          "kind",
+          "uri",
+          "sha256",
+          "byteLength",
+          "sourceId",
+          "appearance",
+          "license"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "assets"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://solar-system.invalid/schemas/v1/assets.json",
+  "title": "assets"
+}

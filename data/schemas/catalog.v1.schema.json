@@ -1,0 +1,1457 @@
+{
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "datasetVersion": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "releasedAtUTC": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{3})?Z$"
+    },
+    "coverage": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "partial",
+            "complete-for-source-release"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceRelease": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "description",
+        "sourceRelease"
+      ],
+      "additionalProperties": false
+    },
+    "conventions": {
+      "type": "object",
+      "properties": {
+        "distance": {
+          "const": "km"
+        },
+        "mass": {
+          "const": "kg"
+        },
+        "angle": {
+          "const": "rad"
+        },
+        "duration": {
+          "const": "s"
+        },
+        "velocity": {
+          "const": "km/s"
+        },
+        "dynamicalTime": {
+          "const": "TDB"
+        },
+        "epochRepresentation": {
+          "const": "JD"
+        },
+        "inputTime": {
+          "const": "UTC"
+        },
+        "handedness": {
+          "const": "right"
+        },
+        "missingValue": {
+          "const": "null"
+        }
+      },
+      "required": [
+        "distance",
+        "mass",
+        "angle",
+        "duration",
+        "velocity",
+        "dynamicalTime",
+        "epochRepresentation",
+        "inputTime",
+        "handedness",
+        "missingValue"
+      ],
+      "additionalProperties": false
+    },
+    "bodies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "identitySourceId": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "star",
+              "planet",
+              "moon",
+              "dwarf-planet",
+              "asteroid",
+              "comet",
+              "barycenter"
+            ]
+          },
+          "naifId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^-?[0-9]+$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "parentId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^[a-z][a-z0-9-]*$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "systemBarycenterId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^[a-z][a-z0-9-]*$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "physical": {
+            "type": "object",
+            "properties": {
+              "meanRadius": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                      },
+                      "unit": {
+                        "const": "km"
+                      },
+                      "uncertainty": {
+                        "anyOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "uncertaintyKind": {
+                        "type": "string",
+                        "enum": [
+                          "source-reported",
+                          "not-reported"
+                        ]
+                      },
+                      "provenance": {
+                        "type": "object",
+                        "properties": {
+                          "sourceId": {
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "^[a-z][a-z0-9-]*$"
+                          },
+                          "locator": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "method": {
+                            "type": "string",
+                            "enum": [
+                              "transcribed",
+                              "converted",
+                              "derived"
+                            ]
+                          },
+                          "note": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "sourceId",
+                          "locator",
+                          "method",
+                          "note"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "unit",
+                      "uncertainty",
+                      "uncertaintyKind",
+                      "provenance"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "mass": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                      },
+                      "unit": {
+                        "const": "kg"
+                      },
+                      "uncertainty": {
+                        "anyOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "uncertaintyKind": {
+                        "type": "string",
+                        "enum": [
+                          "source-reported",
+                          "not-reported"
+                        ]
+                      },
+                      "provenance": {
+                        "type": "object",
+                        "properties": {
+                          "sourceId": {
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "^[a-z][a-z0-9-]*$"
+                          },
+                          "locator": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "method": {
+                            "type": "string",
+                            "enum": [
+                              "transcribed",
+                              "converted",
+                              "derived"
+                            ]
+                          },
+                          "note": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "sourceId",
+                          "locator",
+                          "method",
+                          "note"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "unit",
+                      "uncertainty",
+                      "uncertaintyKind",
+                      "provenance"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "gm": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                      },
+                      "unit": {
+                        "const": "km^3/s^2"
+                      },
+                      "uncertainty": {
+                        "anyOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "uncertaintyKind": {
+                        "type": "string",
+                        "enum": [
+                          "source-reported",
+                          "not-reported"
+                        ]
+                      },
+                      "provenance": {
+                        "type": "object",
+                        "properties": {
+                          "sourceId": {
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "^[a-z][a-z0-9-]*$"
+                          },
+                          "locator": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "method": {
+                            "type": "string",
+                            "enum": [
+                              "transcribed",
+                              "converted",
+                              "derived"
+                            ]
+                          },
+                          "note": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "sourceId",
+                          "locator",
+                          "method",
+                          "note"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "unit",
+                      "uncertainty",
+                      "uncertaintyKind",
+                      "provenance"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "meanRadius",
+              "mass",
+              "gm"
+            ],
+            "additionalProperties": false
+          },
+          "rotation": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "model": {
+                    "const": "constant-pole"
+                  },
+                  "frame": {
+                    "const": "ICRF"
+                  },
+                  "epoch": {
+                    "type": "object",
+                    "properties": {
+                      "jd": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "timeScale": {
+                        "const": "TDB"
+                      }
+                    },
+                    "required": [
+                      "jd",
+                      "timeScale"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "validity": {
+                    "type": "object",
+                    "properties": {
+                      "start": {
+                        "type": "object",
+                        "properties": {
+                          "jd": {
+                            "type": "number",
+                            "minimum": 0
+                          },
+                          "timeScale": {
+                            "const": "TDB"
+                          }
+                        },
+                        "required": [
+                          "jd",
+                          "timeScale"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "end": {
+                        "type": "object",
+                        "properties": {
+                          "jd": {
+                            "type": "number",
+                            "minimum": 0
+                          },
+                          "timeScale": {
+                            "const": "TDB"
+                          }
+                        },
+                        "required": [
+                          "jd",
+                          "timeScale"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "start",
+                      "end"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "accuracy": {
+                    "const": "approximate"
+                  },
+                  "poleRightAscension": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": "number",
+                        "minimum": 0,
+                        "exclusiveMaximum": 6.283185307179586
+                      },
+                      "unit": {
+                        "const": "rad"
+                      },
+                      "uncertainty": {
+                        "anyOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "uncertaintyKind": {
+                        "type": "string",
+                        "enum": [
+                          "source-reported",
+                          "not-reported"
+                        ]
+                      },
+                      "provenance": {
+                        "type": "object",
+                        "properties": {
+                          "sourceId": {
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "^[a-z][a-z0-9-]*$"
+                          },
+                          "locator": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "method": {
+                            "type": "string",
+                            "enum": [
+                              "transcribed",
+                              "converted",
+                              "derived"
+                            ]
+                          },
+                          "note": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "sourceId",
+                          "locator",
+                          "method",
+                          "note"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "unit",
+                      "uncertainty",
+                      "uncertaintyKind",
+                      "provenance"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "poleDeclination": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": "number",
+                        "minimum": -1.5707963267948966,
+                        "maximum": 1.5707963267948966
+                      },
+                      "unit": {
+                        "const": "rad"
+                      },
+                      "uncertainty": {
+                        "anyOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "uncertaintyKind": {
+                        "type": "string",
+                        "enum": [
+                          "source-reported",
+                          "not-reported"
+                        ]
+                      },
+                      "provenance": {
+                        "type": "object",
+                        "properties": {
+                          "sourceId": {
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "^[a-z][a-z0-9-]*$"
+                          },
+                          "locator": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "method": {
+                            "type": "string",
+                            "enum": [
+                              "transcribed",
+                              "converted",
+                              "derived"
+                            ]
+                          },
+                          "note": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "sourceId",
+                          "locator",
+                          "method",
+                          "note"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "unit",
+                      "uncertainty",
+                      "uncertaintyKind",
+                      "provenance"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "primeMeridian": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": "number",
+                        "minimum": 0,
+                        "exclusiveMaximum": 6.283185307179586
+                      },
+                      "unit": {
+                        "const": "rad"
+                      },
+                      "uncertainty": {
+                        "anyOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "uncertaintyKind": {
+                        "type": "string",
+                        "enum": [
+                          "source-reported",
+                          "not-reported"
+                        ]
+                      },
+                      "provenance": {
+                        "type": "object",
+                        "properties": {
+                          "sourceId": {
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "^[a-z][a-z0-9-]*$"
+                          },
+                          "locator": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "method": {
+                            "type": "string",
+                            "enum": [
+                              "transcribed",
+                              "converted",
+                              "derived"
+                            ]
+                          },
+                          "note": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "sourceId",
+                          "locator",
+                          "method",
+                          "note"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "unit",
+                      "uncertainty",
+                      "uncertaintyKind",
+                      "provenance"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "rate": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": "number"
+                      },
+                      "unit": {
+                        "const": "rad/s"
+                      },
+                      "uncertainty": {
+                        "anyOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "uncertaintyKind": {
+                        "type": "string",
+                        "enum": [
+                          "source-reported",
+                          "not-reported"
+                        ]
+                      },
+                      "provenance": {
+                        "type": "object",
+                        "properties": {
+                          "sourceId": {
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "^[a-z][a-z0-9-]*$"
+                          },
+                          "locator": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "method": {
+                            "type": "string",
+                            "enum": [
+                              "transcribed",
+                              "converted",
+                              "derived"
+                            ]
+                          },
+                          "note": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "sourceId",
+                          "locator",
+                          "method",
+                          "note"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "unit",
+                      "uncertainty",
+                      "uncertaintyKind",
+                      "provenance"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "model",
+                  "frame",
+                  "epoch",
+                  "validity",
+                  "accuracy",
+                  "poleRightAscension",
+                  "poleDeclination",
+                  "primeMeridian",
+                  "rate"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "orbit": {
+            "anyOf": [
+              {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "centerId": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^[a-z][a-z0-9-]*$"
+                      },
+                      "frame": {
+                        "type": "string",
+                        "enum": [
+                          "ICRF",
+                          "ECLIPJ2000"
+                        ]
+                      },
+                      "validity": {
+                        "type": "object",
+                        "properties": {
+                          "start": {
+                            "type": "object",
+                            "properties": {
+                              "jd": {
+                                "type": "number",
+                                "minimum": 0
+                              },
+                              "timeScale": {
+                                "const": "TDB"
+                              }
+                            },
+                            "required": [
+                              "jd",
+                              "timeScale"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "end": {
+                            "type": "object",
+                            "properties": {
+                              "jd": {
+                                "type": "number",
+                                "minimum": 0
+                              },
+                              "timeScale": {
+                                "const": "TDB"
+                              }
+                            },
+                            "required": [
+                              "jd",
+                              "timeScale"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "start",
+                          "end"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "sourceId": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^[a-z][a-z0-9-]*$"
+                      },
+                      "model": {
+                        "const": "keplerian"
+                      },
+                      "epoch": {
+                        "type": "object",
+                        "properties": {
+                          "jd": {
+                            "type": "number",
+                            "minimum": 0
+                          },
+                          "timeScale": {
+                            "const": "TDB"
+                          }
+                        },
+                        "required": [
+                          "jd",
+                          "timeScale"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "accuracy": {
+                        "const": "approximate"
+                      },
+                      "semiMajorAxis": {
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "type": "number",
+                            "exclusiveMinimum": 0
+                          },
+                          "unit": {
+                            "const": "km"
+                          },
+                          "uncertainty": {
+                            "anyOf": [
+                              {
+                                "type": "number",
+                                "minimum": 0
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "uncertaintyKind": {
+                            "type": "string",
+                            "enum": [
+                              "source-reported",
+                              "not-reported"
+                            ]
+                          },
+                          "provenance": {
+                            "type": "object",
+                            "properties": {
+                              "sourceId": {
+                                "type": "string",
+                                "minLength": 1,
+                                "pattern": "^[a-z][a-z0-9-]*$"
+                              },
+                              "locator": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "method": {
+                                "type": "string",
+                                "enum": [
+                                  "transcribed",
+                                  "converted",
+                                  "derived"
+                                ]
+                              },
+                              "note": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "sourceId",
+                              "locator",
+                              "method",
+                              "note"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "value",
+                          "unit",
+                          "uncertainty",
+                          "uncertaintyKind",
+                          "provenance"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "eccentricity": {
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "type": "number",
+                            "minimum": 0,
+                            "exclusiveMaximum": 1
+                          },
+                          "unit": {
+                            "const": "1"
+                          },
+                          "uncertainty": {
+                            "anyOf": [
+                              {
+                                "type": "number",
+                                "minimum": 0
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "uncertaintyKind": {
+                            "type": "string",
+                            "enum": [
+                              "source-reported",
+                              "not-reported"
+                            ]
+                          },
+                          "provenance": {
+                            "type": "object",
+                            "properties": {
+                              "sourceId": {
+                                "type": "string",
+                                "minLength": 1,
+                                "pattern": "^[a-z][a-z0-9-]*$"
+                              },
+                              "locator": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "method": {
+                                "type": "string",
+                                "enum": [
+                                  "transcribed",
+                                  "converted",
+                                  "derived"
+                                ]
+                              },
+                              "note": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "sourceId",
+                              "locator",
+                              "method",
+                              "note"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "value",
+                          "unit",
+                          "uncertainty",
+                          "uncertaintyKind",
+                          "provenance"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "inclination": {
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 3.141592653589793
+                          },
+                          "unit": {
+                            "const": "rad"
+                          },
+                          "uncertainty": {
+                            "anyOf": [
+                              {
+                                "type": "number",
+                                "minimum": 0
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "uncertaintyKind": {
+                            "type": "string",
+                            "enum": [
+                              "source-reported",
+                              "not-reported"
+                            ]
+                          },
+                          "provenance": {
+                            "type": "object",
+                            "properties": {
+                              "sourceId": {
+                                "type": "string",
+                                "minLength": 1,
+                                "pattern": "^[a-z][a-z0-9-]*$"
+                              },
+                              "locator": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "method": {
+                                "type": "string",
+                                "enum": [
+                                  "transcribed",
+                                  "converted",
+                                  "derived"
+                                ]
+                              },
+                              "note": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "sourceId",
+                              "locator",
+                              "method",
+                              "note"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "value",
+                          "unit",
+                          "uncertainty",
+                          "uncertaintyKind",
+                          "provenance"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "longitudeAscendingNode": {
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "type": "number",
+                            "minimum": 0,
+                            "exclusiveMaximum": 6.283185307179586
+                          },
+                          "unit": {
+                            "const": "rad"
+                          },
+                          "uncertainty": {
+                            "anyOf": [
+                              {
+                                "type": "number",
+                                "minimum": 0
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "uncertaintyKind": {
+                            "type": "string",
+                            "enum": [
+                              "source-reported",
+                              "not-reported"
+                            ]
+                          },
+                          "provenance": {
+                            "type": "object",
+                            "properties": {
+                              "sourceId": {
+                                "type": "string",
+                                "minLength": 1,
+                                "pattern": "^[a-z][a-z0-9-]*$"
+                              },
+                              "locator": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "method": {
+                                "type": "string",
+                                "enum": [
+                                  "transcribed",
+                                  "converted",
+                                  "derived"
+                                ]
+                              },
+                              "note": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "sourceId",
+                              "locator",
+                              "method",
+                              "note"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "value",
+                          "unit",
+                          "uncertainty",
+                          "uncertaintyKind",
+                          "provenance"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "argumentPeriapsis": {
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "type": "number",
+                            "minimum": 0,
+                            "exclusiveMaximum": 6.283185307179586
+                          },
+                          "unit": {
+                            "const": "rad"
+                          },
+                          "uncertainty": {
+                            "anyOf": [
+                              {
+                                "type": "number",
+                                "minimum": 0
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "uncertaintyKind": {
+                            "type": "string",
+                            "enum": [
+                              "source-reported",
+                              "not-reported"
+                            ]
+                          },
+                          "provenance": {
+                            "type": "object",
+                            "properties": {
+                              "sourceId": {
+                                "type": "string",
+                                "minLength": 1,
+                                "pattern": "^[a-z][a-z0-9-]*$"
+                              },
+                              "locator": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "method": {
+                                "type": "string",
+                                "enum": [
+                                  "transcribed",
+                                  "converted",
+                                  "derived"
+                                ]
+                              },
+                              "note": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "sourceId",
+                              "locator",
+                              "method",
+                              "note"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "value",
+                          "unit",
+                          "uncertainty",
+                          "uncertaintyKind",
+                          "provenance"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "meanAnomaly": {
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "type": "number",
+                            "minimum": 0,
+                            "exclusiveMaximum": 6.283185307179586
+                          },
+                          "unit": {
+                            "const": "rad"
+                          },
+                          "uncertainty": {
+                            "anyOf": [
+                              {
+                                "type": "number",
+                                "minimum": 0
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "uncertaintyKind": {
+                            "type": "string",
+                            "enum": [
+                              "source-reported",
+                              "not-reported"
+                            ]
+                          },
+                          "provenance": {
+                            "type": "object",
+                            "properties": {
+                              "sourceId": {
+                                "type": "string",
+                                "minLength": 1,
+                                "pattern": "^[a-z][a-z0-9-]*$"
+                              },
+                              "locator": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "method": {
+                                "type": "string",
+                                "enum": [
+                                  "transcribed",
+                                  "converted",
+                                  "derived"
+                                ]
+                              },
+                              "note": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "sourceId",
+                              "locator",
+                              "method",
+                              "note"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "value",
+                          "unit",
+                          "uncertainty",
+                          "uncertaintyKind",
+                          "provenance"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "centerId",
+                      "frame",
+                      "validity",
+                      "sourceId",
+                      "model",
+                      "epoch",
+                      "accuracy",
+                      "semiMajorAxis",
+                      "eccentricity",
+                      "inclination",
+                      "longitudeAscendingNode",
+                      "argumentPeriapsis",
+                      "meanAnomaly"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "centerId": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^[a-z][a-z0-9-]*$"
+                      },
+                      "frame": {
+                        "type": "string",
+                        "enum": [
+                          "ICRF",
+                          "ECLIPJ2000"
+                        ]
+                      },
+                      "validity": {
+                        "type": "object",
+                        "properties": {
+                          "start": {
+                            "type": "object",
+                            "properties": {
+                              "jd": {
+                                "type": "number",
+                                "minimum": 0
+                              },
+                              "timeScale": {
+                                "const": "TDB"
+                              }
+                            },
+                            "required": [
+                              "jd",
+                              "timeScale"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "end": {
+                            "type": "object",
+                            "properties": {
+                              "jd": {
+                                "type": "number",
+                                "minimum": 0
+                              },
+                              "timeScale": {
+                                "const": "TDB"
+                              }
+                            },
+                            "required": [
+                              "jd",
+                              "timeScale"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "start",
+                          "end"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "sourceId": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^[a-z][a-z0-9-]*$"
+                      },
+                      "model": {
+                        "const": "ephemeris"
+                      },
+                      "accuracy": {
+                        "const": "source-ephemeris"
+                      },
+                      "assetId": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^[a-z][a-z0-9-]*$"
+                      },
+                      "aberration": {
+                        "const": "NONE"
+                      },
+                      "distanceUnit": {
+                        "const": "km"
+                      },
+                      "velocityUnit": {
+                        "const": "km/s"
+                      }
+                    },
+                    "required": [
+                      "centerId",
+                      "frame",
+                      "validity",
+                      "sourceId",
+                      "model",
+                      "accuracy",
+                      "assetId",
+                      "aberration",
+                      "distanceUnit",
+                      "velocityUnit"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "notes": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "identitySourceId",
+          "kind",
+          "naifId",
+          "parentId",
+          "systemBarycenterId",
+          "physical",
+          "rotation",
+          "orbit",
+          "notes"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "datasetVersion",
+    "releasedAtUTC",
+    "coverage",
+    "conventions",
+    "bodies"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://solar-system.invalid/schemas/v1/catalog.json",
+  "title": "catalog"
+}

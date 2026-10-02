@@ -6,6 +6,7 @@
   "dependencies": {
     "@solar/shared": "0.0.0",
     "@solar/simulation": "0.0.0",
-    "@solar/renderer": "0.0.0"
+    "@solar/renderer": "0.0.0",
+    "@solar/catalog": "0.0.0"
   }
 }
