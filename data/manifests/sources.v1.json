@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "id": "jpl-planet-physical",
+      "publisher": "NASA / JPL Solar System Dynamics",
+      "title": "Planetary Physical Parameters",
+      "url": "https://ssd.jpl.nasa.gov/planets/phys_par.html",
+      "retrievedAtUTC": "2026-10-02T22:05:00Z",
+      "upstreamVersion": null,
+      "snapshotVersion": "2026-10-02-transcription-1",
+      "evidencePath": "data/sources/jpl-planet-physical.transcription.json",
+      "usage": {
+        "status": "review-required",
+        "termsUrl": "https://www.jpl.nasa.gov/jpl-image-use-policy/",
+        "note": "Numerical reference transcription with attribution; no third-party images redistributed. Review each asset license before distribution."
+      }
+    },
+    {
+      "id": "naif-body-identities",
+      "publisher": "NASA / JPL NAIF",
+      "title": "NAIF Integer ID codes",
+      "url": "https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/naif_ids.html",
+      "retrievedAtUTC": "2026-10-02T22:12:00Z",
+      "upstreamVersion": null,
+      "snapshotVersion": "2026-10-02-transcription-1",
+      "evidencePath": "data/sources/naif-identities.transcription.json",
+      "usage": {
+        "status": "review-required",
+        "termsUrl": "https://www.jpl.nasa.gov/jpl-image-use-policy/",
+        "note": "Selected numerical mappings with attribution. Asset redistribution requires a separate usage review."
+      }
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "datasetVersion": "0.1.0",
+  "algorithm": "sha256",
+  "files": [
+    {
+      "path": "data/catalog/solar-system.v1.json",
+      "sha256": "c3fbef2fc008a45daa20d55304b49b1516a295f42228e990be54390f7552aae8",
+      "byteLength": 16311
+    },
+    {
+      "path": "data/manifests/assets.v1.json",
+      "sha256": "427bc853754c83bccc1baa0275170692c65b512c29978ce7d0407037b3409aed",
+      "byteLength": 41
+    },
+    {
+      "path": "data/manifests/sources.v1.json",
+      "sha256": "ace5af38c793f753b958f8c0e29fd459aab2d0bdfae6eb5665c553077618e859",
+      "byteLength": 1424
+    },
+    {
+      "path": "data/schemas/assets.v1.schema.json",
+      "sha256": "cdf37edb79b44221b82fe19af253199d0c01bda68bb92af8ccbfe2dfaf42be9f",
+      "byteLength": 2771
+    },
+    {
+      "path": "data/schemas/catalog.v1.schema.json",
+      "sha256": "e53bf929ed85c930c766ef89de66bc3c96ccf4505088492723caaa8ae2bc147a",
+      "byteLength": 50753
+    },
+    {
+      "path": "data/schemas/sources.v1.schema.json",
+      "sha256": "63d6e66d92331673b6edd9f5200d99f6e5836bdcc7085d164caf7fd2788dca2e",
+      "byteLength": 2687
+    },
+    {
+      "path": "data/sources/jpl-planet-physical.transcription.json",
+      "sha256": "1ccb5df8e5ab8dbcdaccfe6f9d0ca3eeb5a481487979f9bdcac0ad55d9b8718b",
+      "byteLength": 1882
+    },
+    {
+      "path": "data/sources/naif-identities.transcription.json",
+      "sha256": "387db737dab3a14279c40b31376a70b85aa943c39fd6779cf94dc83c323f9a22",
+      "byteLength": 2071
+    }
+  ]
+}

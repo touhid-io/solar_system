@@ -1,0 +1,75 @@
+{
+  "snapshotVersion": "2026-10-02-transcription-1",
+  "sourceUrl": "https://ssd.jpl.nasa.gov/planets/phys_par.html",
+  "columns": {
+    "meanRadius": "km",
+    "mass": "1e24 kg"
+  },
+  "rows": [
+    {
+      "id": "mercury",
+      "name": "Mercury",
+      "meanRadiusKm": 2439.4,
+      "radiusUncertaintyKm": 0.1,
+      "mass1e24Kg": 0.330103,
+      "massUncertainty1e24Kg": 2.1e-05
+    },
+    {
+      "id": "venus",
+      "name": "Venus",
+      "meanRadiusKm": 6051.8,
+      "radiusUncertaintyKm": 1,
+      "mass1e24Kg": 4.86731,
+      "massUncertainty1e24Kg": 0.00023
+    },
+    {
+      "id": "earth",
+      "name": "Earth",
+      "meanRadiusKm": 6371.0084,
+      "radiusUncertaintyKm": 0.0001,
+      "mass1e24Kg": 5.97217,
+      "massUncertainty1e24Kg": 0.00028
+    },
+    {
+      "id": "mars",
+      "name": "Mars",
+      "meanRadiusKm": 3389.5,
+      "radiusUncertaintyKm": 0.2,
+      "mass1e24Kg": 0.641691,
+      "massUncertainty1e24Kg": 3e-05
+    },
+    {
+      "id": "jupiter",
+      "name": "Jupiter",
+      "meanRadiusKm": 69911,
+      "radiusUncertaintyKm": 6,
+      "mass1e24Kg": 1898.125,
+      "massUncertainty1e24Kg": 0.088
+    },
+    {
+      "id": "saturn",
+      "name": "Saturn",
+      "meanRadiusKm": 58232,
+      "radiusUncertaintyKm": 6,
+      "mass1e24Kg": 568.317,
+      "massUncertainty1e24Kg": 0.026
+    },
+    {
+      "id": "uranus",
+      "name": "Uranus",
+      "meanRadiusKm": 25362,
+      "radiusUncertaintyKm": 7,
+      "mass1e24Kg": 86.8099,
+      "massUncertainty1e24Kg": 0.004
+    },
+    {
+      "id": "neptune",
+      "name": "Neptune",
+      "meanRadiusKm": 24622,
+      "radiusUncertaintyKm": 19,
+      "mass1e24Kg": 102.4092,
+      "massUncertainty1e24Kg": 0.0048
+    }
+  ],
+  "note": "Selected-column transcription of the JPL table; not a raw HTML snapshot. Source-reported \u00b1 values are retained without inferring a confidence level."
+}

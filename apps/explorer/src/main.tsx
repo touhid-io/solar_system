@@ -2,6 +2,9 @@ import { StrictMode, useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { PreviewSimulation } from '@solar/simulation';
 import { createPreviewScene } from '@solar/renderer';
+import { loadStarterScientificBundle } from '@solar/catalog';
+const scientificBundle = loadStarterScientificBundle();
+const earthRecord = scientificBundle.catalog.bodies.find(body => body.id === 'earth')!;
 import './styles.css';
 function App(){
  const viewport=useRef<HTMLDivElement>(null),pausedRef=useRef(false),resetRef=useRef<()=>void>(()=>{});
@@ -18,14 +21,15 @@ function App(){
   return()=>{cancelAnimationFrame(frame);observer.disconnect();controller.dispose();resetRef.current=()=>{};};
  },[]);
  return <main>
-  <header><a className="brand" href="#"><span className="mark">◉</span><div>SOLAR SYSTEM<span className="subtitle">OBSERVATORY / ENGINEERING PREVIEW</span></div></a><span className="badge">P0 FOUNDATION</span></header>
+  <header><a className="brand" href="#"><span className="mark">◉</span><div>SOLAR SYSTEM<span className="subtitle">OBSERVATORY / ENGINEERING PREVIEW</span></div></a><span className="badge">P1 DATA CONTRACT</span></header>
   <section className="workspace"><aside>
    <p className="eyebrow">OUR COSMIC NEIGHBORHOOD</p><h1>A foundation for<br/>discovery.</h1><p className="intro">Explore an interactive preview while the scientific catalog and orbital engine take shape.</p>
    <div className="panel"><p className="eyebrow">PREVIEW SYSTEM</p><div className="body-row"><i className="sun"/>Sun<span>Star</span></div><div className="body-row"><i className="earth"/>Earth<span>Planet</span></div><div className="body-row"><i className="moon"/>Moon<span>Satellite</span></div></div>
    <div className="controls"><button onClick={()=>setPaused(p=>!p)} aria-pressed={paused}>{paused?'Resume preview':'Pause preview'}</button><button className="secondary" onClick={()=>resetRef.current()}>Reset view</button></div>
+   <div className="panel scientific-card"><p className="eyebrow">SCIENTIFIC CATALOG / {scientificBundle.catalog.datasetVersion}</p><p>10 celestial bodies · 9 coordinate origins</p><p>Earth mean radius: {earthRecord.physical.meanRadius!.value.toLocaleString('en-US', {maximumFractionDigits:4})} km</p><a href={scientificBundle.sources.sources[0].url} target="_blank" rel="noreferrer">Source: NASA / JPL SSD ↗</a><p className="notice">Partial catalog. Physical data is sourced; the scene still uses illustrative motion and scale.</p></div>
    <p className="notice">Illustrative preview. Sizes, distances and motion are exaggerated; this is not a scientific simulation.</p>
   </aside><div className="scene-wrap"><div className="viewport" ref={viewport}/>{error&&<div className="error" role="alert">{error}</div>}<div className="scene-caption">SUN / EARTH / MOON<span>Drag to orbit · Scroll or pinch to zoom</span></div></div></section>
-  <footer><span>ENGLISH INTERFACE · MODULAR ENGINE</span><span>Scientific data integration begins in P1.</span></footer>
+  <footer><span>ENGLISH INTERFACE · MODULAR ENGINE</span><span>Versioned data · Explicit units · Validated provenance</span></footer>
  </main>;
 }
 createRoot(document.getElementById('root')!).render(<StrictMode><App/></StrictMode>);
