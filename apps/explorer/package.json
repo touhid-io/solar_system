@@ -1,0 +1,11 @@
+{
+  "name": "@solar/explorer",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@solar/shared": "0.0.0",
+    "@solar/simulation": "0.0.0",
+    "@solar/renderer": "0.0.0"
+  }
+}
